@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:micro="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             xmlns:oxy="clr-namespace:OxyPlot.Maui.Skia;assembly=OxyPlot.Maui.Skia"
+             x:Class="WeightStat.MainPage">
+
+
+    <ScrollView
+        BackgroundColor="LightGray">
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <DatePicker
+                    Format="d"
+                    x:Name="datePicker"
+                    DateSelected="DateSelected" />
+                <Entry
+                    x:Name="weightEntry"
+                    Placeholder="Enter weight"
+                    Keyboard="Numeric" />
+                <Picker
+                    x:Name="timePicker"
+                    SelectedIndexChanged="timePicker_SelectedIndexChanged">
+                    <Picker.Items>
+                        <x:String>morning</x:String>
+                        <x:String>evening</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Button
+                    Text="Add"
+                    x:Name="addRecordBtn"
+                    Clicked="addRecordBtn_OnClicked" />
+            </HorizontalStackLayout>
+            <Label
+                x:Name="infoLabel"
+                TextColor="Red" />
+            <!--<micro:ChartView
+                x:Name="chartView"
+                HeightRequest="1000" />-->
+            <oxy:PlotView
+                x:Name="plotView"
+                HeightRequest="500" />
+        </VerticalStackLayout>
+    </ScrollView>
+    
+</ContentPage>
