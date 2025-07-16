@@ -43,10 +43,34 @@ namespace DataManipulator
             return db.Table<WeightRecord>().ToList();
         });
 
-        public int AddRecord(WeightRecord record) => GET(db =>
+        public int DeleteRecord(WeightRecord record) => GET(db =>
         {
+            return db.Delete<WeightRecord>(record.Id);
+        });
+
+        private List<int> GetAllPrimaryKeys() => GET(db =>
+        {
+            return db.Query<int>("SELECT id FROM records");
+        });
+
+        public int AddRecord(DateTime date, float weight, RecordTime recordTime) => GET(db =>
+        {
+            var record = FormRecord(date, weight, recordTime);
             return db.Insert(record);
         });
+
+        private WeightRecord FormRecord(DateTime date, float weight, RecordTime recordTime)
+        {
+            List<int> ids = GetAllPrimaryKeys();
+            int id = ids.Count > 0 ? ids.Max() + 1 : 1;
+            return new WeightRecord
+            {
+                Id = id,
+                Date = date,
+                Weight = weight,
+                RecTime = recordTime
+            };
+        }
 
     }
 }

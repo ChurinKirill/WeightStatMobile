@@ -5,8 +5,14 @@ namespace DataManipulator
     public enum RecordTime
     {
         Morning,
-        Evening,
-        Undefined
+        Evening
+    }
+
+    public enum ErrorCode
+    {
+        Ok,
+        IncorrectInput,
+        InternalError
     }
 
     [Table("records")]

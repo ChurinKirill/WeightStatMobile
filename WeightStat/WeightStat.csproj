@@ -62,6 +62,21 @@
 	  <ProjectReference Include="..\DataManipulator\DataManipulator.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="StatisticPage.xaml.cs">
+	    <DependentUpon>StatisticPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="DataEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="StatisticPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionWeightStatHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

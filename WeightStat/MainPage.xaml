@@ -4,43 +4,112 @@
              xmlns:micro="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
              xmlns:oxy="clr-namespace:OxyPlot.Maui.Skia;assembly=OxyPlot.Maui.Skia"
              x:Class="WeightStat.MainPage">
+    
+    <!--<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid
+            Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <DatePicker
+                Format="d"
+                x:Name="datePicker"
+                TextColor="Black"
+                DateSelected="DateSelected"
+                Grid.Row="0" Grid.Column="0"/>
+
+            <Entry
+                x:Name="weightEntry"
+                Placeholder="Enter weight"
+                TextColor="Black"
+                Keyboard="Numeric"
+                Grid.Row="0" Grid.Column="1"/>
+
+            <Picker
+                x:Name="timePicker"
+                SelectedIndexChanged="timePicker_SelectedIndexChanged"
+                TextColor="Black"
+                Grid.Row="0" Grid.Column="2">
+                <Picker.Items>
+                    <x:String>morning</x:String>
+                    <x:String>evening</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <HorizontalStackLayout
+                Grid.Row="1" Grid.Column="0">
+                <CheckBox
+                    x:Name="doDeleteCheckbox"
+                    CheckedChanged="doDeleteCheckbox_OnCheckedChanged"/>
+            </HorizontalStackLayout>
+
+            <Button
+                Text="Add"
+                x:Name="recordBtn"
+                Clicked="recordBtn_OnClicked"
+                TextColor="Black"
+                BorderColor="Black"
+                Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
 
 
-    <ScrollView
+
+        </Grid>
+
+        <oxy:PlotView
+            x:Name="plotView"
+            HeightRequest="500"
+            Grid.Row="1" Grid.Column="0"/>
+
+    </Grid>-->
+    
+    <!--<ScrollView
         BackgroundColor="LightGray">
-        <VerticalStackLayout>
+        <VerticalStackLayout
+            Spacing="5">
+            
             <HorizontalStackLayout>
-                <DatePicker
-                    Format="d"
-                    x:Name="datePicker"
-                    DateSelected="DateSelected" />
-                <Entry
-                    x:Name="weightEntry"
-                    Placeholder="Enter weight"
-                    Keyboard="Numeric" />
-                <Picker
-                    x:Name="timePicker"
-                    SelectedIndexChanged="timePicker_SelectedIndexChanged">
-                    <Picker.Items>
-                        <x:String>morning</x:String>
-                        <x:String>evening</x:String>
-                    </Picker.Items>
-                </Picker>
-                <Button
-                    Text="Add"
-                    x:Name="addRecordBtn"
-                    Clicked="addRecordBtn_OnClicked" />
+                
+                
+                
+                
             </HorizontalStackLayout>
             <Label
                 x:Name="infoLabel"
                 TextColor="Red" />
-            <!--<micro:ChartView
+            --><!--<micro:ChartView
                 x:Name="chartView"
-                HeightRequest="1000" />-->
+                HeightRequest="1000" />--><!--
             <oxy:PlotView
                 x:Name="plotView"
                 HeightRequest="500" />
         </VerticalStackLayout>
-    </ScrollView>
+    </ScrollView>-->
+
+    <VerticalStackLayout
+        Spacing="5">
+        <Button
+            x:Name="toDataEditBtn"
+            Text="Edit data"
+            Clicked="toDataEditBtn_OnClick"/>
+        <Button
+            x:Name="toStatisticBtn"
+            Text="View statistics"
+            Clicked="toStatisticBtn_OnClick"/>
+    </VerticalStackLayout>
     
 </ContentPage>
