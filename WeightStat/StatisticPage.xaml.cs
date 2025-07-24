@@ -1,66 +1,42 @@
 using DataManipulator;
 using OxyPlot;
 using OxyPlot.Axes;
+using OxyPlot.Legends;
 using OxyPlot.Series;
 
 namespace WeightStat;
 
 public partial class StatisticPage : ContentPage
 {
-
-    private struct Axes
-    {
-        public List<string> xValues;
-        public List<float> yValues;
-        public RecordTime type;
-    }
-
 	DatabaseService dbService = new DatabaseService();
+
+	List<WeightRecord> Records;
 
     public StatisticPage()
 	{
 		InitializeComponent();
-		BuildBlot();
-	}
+		UpdateRecords();
+		BuildMainBlot();
+		BuildMonthStatPlot();
 
-	private List<Axes> GetAxesByRecordTime()
+    }
+
+	private void UpdateRecords()
 	{
-		List<Axes> result = new List<Axes>();
+		Records = dbService.GetAllRecords()
+			.OrderBy(r => r.Date.Year)
+			.OrderBy(r => r.Date.Month)
+			.ToList();
+    }
 
-		List<WeightRecord> records = dbService.GetAllRecords();
-
-		foreach(int i in Enum.GetValues(typeof(RecordTime)))
-		{
-			List<string> dates = new List<string>();
-			List<float> weights = new List<float>();
-
-			foreach (var record in records)
-			{
-				if ((RecordTime)i == record.RecTime)
-				{
-					dates.Add(record.Date.ToString("dd.MM"));
-					weights.Add(record.Weight);
-				}
-                
-			}
-
-			result.Add(new Axes
-			{
-				xValues = dates,
-				yValues = weights,
-				type = (RecordTime)i
-			});
-        }
-		return result;
-	}
-
-	private void BuildBlot()
+	private void BuildMainBlot()
 	{
-		List<Axes> axes = GetAxesByRecordTime();
+		var axis = DataPreparator.GetAxisByRecordTime(Records);
+		var xValues = axis[0].xValues.Concat(axis[1].xValues).Distinct().ToList();
 
         var model = new PlotModel { Title = "WeightPlot" };
 
-        var xAxes = new CategoryAxis
+        var xAxis = new CategoryAxis
 		{
 			Position = AxisPosition.Bottom,
 			Title = "Date",
@@ -71,12 +47,12 @@ public partial class StatisticPage : ContentPage
 			FontSize = 16
 		};
 
-		foreach (var date in axes[0].xValues)
+		foreach (var date in xValues)
 		{
-			xAxes.Labels.Add(date);
+			xAxis.Labels.Add(date.ToString("dd.MM.yy"));
 		}
 
-		model.Axes.Add(xAxes);
+		model.Axes.Add(xAxis);
 
         model.Axes.Add(new LinearAxis
 		{
@@ -90,6 +66,7 @@ public partial class StatisticPage : ContentPage
 		// пока руками
         var series1 = new LineSeries
 		{
+			Title = "Morning",
 			Color = OxyColors.Blue,
 			StrokeThickness = 2,
 			XAxisKey = "Dates",
@@ -98,26 +75,104 @@ public partial class StatisticPage : ContentPage
 
         var series2 = new LineSeries
         {
+			Title = "Evening",
             Color = OxyColors.Orange,
             StrokeThickness = 2,
             XAxisKey = "Dates",
             MarkerType = MarkerType.Circle,
         };
 
-		for (int i = 0; i < axes[0].xValues.Count; i++)
-			series1.Points.Add(new DataPoint(i, axes[0].yValues[i]));
+		for (int i = 0; i < axis[0].xValues.Count; i++)
+			series1.Points.Add(new DataPoint(xValues.FindIndex(x => x == axis[0].xValues[i]), axis[0].yValues[i]));
 
-        for (int i = 0; i < axes[1].xValues.Count; i++)
-            series2.Points.Add(new DataPoint(i, axes[1].yValues[i]));
+        for (int i = 0; i < axis[1].xValues.Count; i++)
+            series2.Points.Add(new DataPoint(xValues.FindIndex(x => x == axis[1].xValues[i]), axis[1].yValues[i]));
 
 		model.Series.Add(series1);
 		model.Series.Add(series2);
 
-		mainPlotWiew.Model = model;
+		mainPlotView.Model = model;
     }
 
-    private async void toHomeBtn_OnClick(object sender, EventArgs e)
+	private void BuildMonthStatPlot()
 	{
-		await Navigation.PushAsync(new MainPage());
-	}
+
+		var model = new PlotModel 
+		{
+			Title = "MothStatPlot",
+			IsLegendVisible = true
+		};
+
+        var legend = new Legend
+        {
+            LegendPlacement = LegendPlacement.Inside,
+            LegendPosition = LegendPosition.BottomRight,
+            LegendBackground = OxyColor.FromAColor(200, OxyColors.White),
+            LegendBorder = OxyColors.Black,
+            Key = "Legend",
+        };
+
+		model.Legends.Add(legend);
+
+        var intervals = DataPreparator.GetIntervalInfos(Records);
+
+		var valueAxis = new LinearAxis
+		{
+			Position = AxisPosition.Bottom,
+			Title = "Weight",
+            MajorGridlineStyle = LineStyle.LongDash,
+            MajorGridlineColor = OxyColors.Gray,
+            FontSize = 16,
+			AbsoluteMinimum = 0
+        };
+		
+		var categoryAxis = new CategoryAxis
+		{
+			Position = AxisPosition.Left,
+			Title = "Month",
+			Angle = 45,
+			FontSize = 16,
+            ItemsSource = intervals.Select(i => $"{i.MonthNum}.{i.YearNum}").ToList()
+		};
+
+		model.Axes.Add(categoryAxis);
+		model.Axes.Add(valueAxis);
+
+
+		var series1 = new BarSeries
+		{
+			Title = "Min",
+			StrokeColor = OxyColors.Black,
+			FillColor = OxyColors.Blue,
+			BarWidth = 1,
+			StrokeThickness = 0.5,
+			LabelPlacement = LabelPlacement.Outside,
+			LabelFormatString = "{0:.00}",
+			LegendKey = "Legend"
+        };
+
+        var series2 = new BarSeries
+        {
+            Title = "Max",
+            StrokeColor = OxyColors.Black,
+            FillColor = OxyColors.OrangeRed,
+			BarWidth = 1,
+            StrokeThickness = 0.5,
+            LabelPlacement = LabelPlacement.Outside,
+            LabelFormatString = "{0:.00}",
+            LegendKey = "Legend"
+        };
+
+		foreach (var interval in intervals)
+		{
+			series1.Items.Add(new BarItem { Value = interval.MinWeight });
+            series2.Items.Add(new BarItem { Value = interval.MaxWeight });
+        }
+
+		model.Series.Add(series1);
+		model.Series.Add(series2);
+
+		monthStatPlotView.Model = model;
+
+    }
 }

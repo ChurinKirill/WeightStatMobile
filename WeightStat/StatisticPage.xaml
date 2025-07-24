@@ -4,20 +4,32 @@
              xmlns:oxy="clr-namespace:OxyPlot.Maui.Skia;assembly=OxyPlot.Maui.Skia"
              x:Class="WeightStat.StatisticPage"
              Title="Statistic">
-    <Grid
+    <!--<Grid
         RowDefinitions="0.25*,6*,0.25*"
         BackgroundColor="WhiteSmoke">
-        <!--<Button
+        --><!--<Button
             x:Name="toHomeBtn"
             Text="Back to Home"
             Clicked="toHomeBtn_OnClick"
             BorderWidth="1"
             BorderColor="Black"
             TextColor="Black"
-            Grid.Row="0" Grid.Column="0"/>-->
+            Grid.Row="0" Grid.Column="0"/>--><!--
 
         <oxy:PlotView
             x:Name="mainPlotWiew"
             Grid.Row="1" Grid.Column="0"/>
-    </Grid>
+    </Grid>-->
+
+    <ScrollView>
+        <VerticalStackLayout
+            BackgroundColor="WhiteSmoke">
+            <oxy:PlotView
+                x:Name="mainPlotView"
+                HeightRequest="500"/>
+            <oxy:PlotView
+                x:Name="monthStatPlotView"
+                HeightRequest="500"/>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

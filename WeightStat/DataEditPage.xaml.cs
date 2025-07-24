@@ -23,11 +23,14 @@ public partial class DataEditPage : ContentPage
 
         listView.ItemsSource = WeightRecords;
         BindingContext = this;
+
+        deleteSelectedBtn.IsEnabled = false;
+        cancelSelectionBtn.IsEnabled = false;
     }
 
     private void UpdateRecords()
     {
-        List<WeightRecord> newRecords = dbService.GetAllRecords();
+        List<WeightRecord> newRecords = dbService.GetAllRecords().OrderByDescending(r => r.Date).ToList();
         var setNewRecords = new HashSet<WeightRecord>(newRecords);
 
         // Удаление лишних элементов
@@ -38,11 +41,12 @@ public partial class DataEditPage : ContentPage
         }
 
         // Добавление новых элементов
-        foreach (var record in setNewRecords)
+        foreach (var record in setNewRecords.OrderByDescending(r => r.Date))
         {
             if (!WeightRecords.Contains(record))
                 WeightRecords.Add(record);
         }
+        amountInfoLabel.Text = $"Total: {WeightRecords.Count} records";
     }
 
     //private async void toHomeBtn_OnClick(object sender, EventArgs e)
@@ -91,10 +95,14 @@ public partial class DataEditPage : ContentPage
 
         if (selectedRecord != null)
         {
+            deleteSelectedBtn.IsEnabled = true;
+            cancelSelectionBtn.IsEnabled = true;
             SelectedRecordInfoLabel.Text = $"Selected: {selectedRecord.RecTime.ToString()} {selectedRecord.Date.ToString("dd.MM")} - {selectedRecord.Weight}kg";
         }
         else
         {
+            deleteSelectedBtn.IsEnabled = false;
+            cancelSelectionBtn.IsEnabled = false;
             SelectedRecordInfoLabel.Text = "Nothing selected";
         }
     }

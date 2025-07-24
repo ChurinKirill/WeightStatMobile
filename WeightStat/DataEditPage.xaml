@@ -7,7 +7,7 @@
              Title="DataEditPage">
     <Grid
         ColumnDefinitions="1*"
-        RowDefinitions="6*,1*"
+        RowDefinitions="0.25*,6*,1*"
         BackgroundColor="WhiteSmoke"
         Padding="10">
 
@@ -17,9 +17,14 @@
             Clicked="toHomeBtn_OnClick"
             Grid.Row="0" Grid.Column="0"/>-->
 
+        <Label
+            x:Name="amountInfoLabel"
+            TextColor="Black"
+            Grid.Row="0" Grid.Column="0"/>
+
         <ListView
             x:Name="listView"
-            Grid.Row="0" Grid.Column="0"
+            Grid.Row="1" Grid.Column="0"
             SelectionMode="Single"
             ItemSelected="listView_ItemSelected">
             <ListView.Header>
@@ -71,7 +76,7 @@
             Padding="5"
             RowDefinitions="1*,1*"
             ColumnDefinitions="2*,2*,2*,1*"
-            Grid.Row="1" Grid.Column="0">
+            Grid.Row="2" Grid.Column="0">
             <DatePicker
                 Format="d"
                 x:Name="datePicker"
