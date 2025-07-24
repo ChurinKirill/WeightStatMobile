@@ -8,13 +8,6 @@ namespace DataManipulator
         Evening
     }
 
-    public enum ErrorCode
-    {
-        Ok,
-        IncorrectInput,
-        InternalError
-    }
-
     [Table("records")]
     public class WeightRecord
     {
@@ -28,4 +21,20 @@ namespace DataManipulator
 
         public RecordTime RecTime { get; set; }
     }
+
+    public struct IntervalInfo
+    {
+        public int YearNum { get; set; }
+        public int MonthNum { get; set; }
+        public float MinWeight { get; set; }
+        public float MaxWeight { get; set; }
+    }
+
+    public struct Axis
+    {
+        public List<DateTime> xValues;
+        public List<float> yValues;
+        public RecordTime type;
+    }
+
 }

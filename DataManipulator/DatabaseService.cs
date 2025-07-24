@@ -71,6 +71,5 @@ namespace DataManipulator
                 RecTime = recordTime
             };
         }
-
     }
 }
